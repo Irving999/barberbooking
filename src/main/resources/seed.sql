@@ -1,9 +1,9 @@
 INSERT INTO users
 (full_name, email, phone, password_hash, role)
 VALUES
-('Alex Johnson', 'alex@barberbook.com', '408-555-1001', 'test-hash', 'PROVIDER'),
-('Marcus Lee', 'marcus@barberbook.com', '408-555-1002', 'test-hash', 'PROVIDER'),
-('John Smith', 'john@example.com', '408-555-2001', 'test-hash', 'CUSTOMER');
+('Alex Johnson', 'alex@barberbook.com', '408-555-1001', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'PROVIDER'),
+('Marcus Lee', 'marcus@barberbook.com', '408-555-1002', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'PROVIDER'),
+('John Smith', 'john@example.com', '408-555-2001', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'CUSTOMER');
 
 INSERT INTO providers (user_id) VALUES (1), (2);
 
