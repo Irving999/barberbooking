@@ -4,7 +4,10 @@ import com.example.barberbooking.dto.SlotDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class SlotRepository {
@@ -45,6 +48,51 @@ public class SlotRepository {
                         resultSet.getTime("start_time").toLocalTime(),
                         resultSet.getTime("end_time").toLocalTime()
                 )
+        );
+    }
+
+    public Optional<Integer> findProviderIdByUserId(int userId) {
+
+        String sql = """
+                SELECT provider_id
+                FROM providers
+                WHERE user_id = ?
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getInt("provider_id"),
+                userId
+        ).stream().findFirst();
+    }
+
+    public void createSlot(
+            int providerId,
+            int serviceId,
+            LocalDate slotDate,
+            LocalTime startTime,
+            LocalTime endTime
+    ) {
+
+        String sql = """
+                INSERT INTO availability_slots (
+                    provider_id,
+                    service_id,
+                    slot_date,
+                    start_time,
+                    end_time,
+                    status
+                )
+                VALUES (?, ?, ?, ?, ?, 'AVAILABLE')
+                """;
+
+        jdbcTemplate.update(
+                sql,
+                providerId,
+                serviceId,
+                slotDate,
+                startTime,
+                endTime
         );
     }
 }
