@@ -70,4 +70,42 @@ public class SlotService {
                 endTime
         );
     }
+
+    public void deleteSlot(int userId, int slotId) {
+
+        if (slotId <= 0) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Invalid slot ID"
+                );
+        }
+
+        int providerId = slotRepository
+                .findProviderIdByUserId(userId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Provider not found"
+                        )
+                );
+
+        boolean exists = slotRepository
+                .slotBelongsToProvider(slotId, providerId);
+
+        if (!exists) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Slot not found"
+                );
+        }
+
+        if (slotRepository.isSlotBooked(slotId)) {
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Cannot remove a booked slot"
+                );
+        }
+
+        slotRepository.deleteSlot(slotId, providerId);
+        }
 }

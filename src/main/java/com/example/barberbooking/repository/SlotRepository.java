@@ -95,4 +95,56 @@ public class SlotRepository {
                 endTime
         );
     }
+
+    public boolean slotBelongsToProvider(int slotId, int providerId) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM availability_slots
+                WHERE slot_id = ?
+                AND provider_id = ?
+                """;
+
+        Integer count = jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
+                slotId,
+                providerId
+        );
+
+        return count != null && count > 0;
+    }
+
+    public boolean isSlotBooked(int slotId) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM appointments
+                WHERE slot_id = ?
+                AND appointment_status = 'BOOKED'
+                """;
+
+        Integer count = jdbcTemplate.queryForObject(
+                sql,
+                Integer.class,
+                slotId
+        );
+
+        return count != null && count > 0;
+    }
+
+    public void deleteSlot(int slotId, int providerId) {
+
+        String sql = """
+                DELETE FROM availability_slots
+                WHERE slot_id = ?
+                AND provider_id = ?
+                """;
+
+        jdbcTemplate.update(
+                sql,
+                slotId,
+                providerId
+        );
+    }
 }

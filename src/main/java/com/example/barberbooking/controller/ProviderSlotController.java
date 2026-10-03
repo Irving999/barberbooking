@@ -42,4 +42,19 @@ public class ProviderSlotController {
                 request.endTime()
         );
     }
+
+    @DeleteMapping("/{slotId}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void deleteSlot(
+                @PathVariable int slotId,
+                HttpSession session
+        ) {
+
+        int userId = sessionService.requireRole(
+                session,
+                "PROVIDER"
+        );
+
+        slotService.deleteSlot(userId, slotId);
+        }
 }
