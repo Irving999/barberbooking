@@ -3,7 +3,8 @@ INSERT INTO users
 VALUES
 ('Alex Johnson', 'alex@barberbook.com', '408-555-1001', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'PROVIDER'),
 ('Marcus Lee', 'marcus@barberbook.com', '408-555-1002', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'PROVIDER'),
-('John Smith', 'john@example.com', '408-555-2001', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'CUSTOMER');
+('John Smith', 'john@example.com', '408-555-2001', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'CUSTOMER'),
+('Jane Doe', 'jane@example.com', '408-219-4943', '$2a$10$MPT2bCLvtwR4DGYRJ.QiReCJGEYbPm6xx6DZP6uW/q4eDS4xg2MG6', 'CUSTOMER');
 
 INSERT INTO providers (user_id) VALUES (1), (2);
 
