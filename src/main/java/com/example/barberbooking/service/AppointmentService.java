@@ -1,6 +1,10 @@
 package com.example.barberbooking.service;
 
+import com.example.barberbooking.dto.AppointmentDto;
 import com.example.barberbooking.repository.AppointmentRepository;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,5 +48,9 @@ public class AppointmentService {
         appointmentRepository.markSlotBooked(
                 lockedSlot
         );
+    }
+
+    public List<AppointmentDto> getAppointmentsForUser(int userId) {
+        return appointmentRepository.findByUserId(userId);
     }
 }

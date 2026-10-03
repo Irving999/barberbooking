@@ -1,9 +1,13 @@
 package com.example.barberbooking.controller;
 
+import com.example.barberbooking.dto.AppointmentDto;
 import com.example.barberbooking.dto.BookingRequest;
 import com.example.barberbooking.service.AppointmentService;
 import com.example.barberbooking.service.SessionService;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +41,17 @@ public class AppointmentController {
                 userId,
                 request.slotId()
         );
+    }
+
+    @GetMapping("/me")
+    public List<AppointmentDto> getMyAppointments(
+            HttpSession session
+    ) {
+        int userId = sessionService.requireRole(
+                session,
+                "CUSTOMER"
+        );
+
+        return appointmentService.getAppointmentsForUser(userId);
     }
 }
