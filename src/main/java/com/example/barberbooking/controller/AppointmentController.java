@@ -2,6 +2,7 @@ package com.example.barberbooking.controller;
 
 import com.example.barberbooking.dto.AppointmentDto;
 import com.example.barberbooking.dto.BookingRequest;
+import com.example.barberbooking.dto.ProviderAppointmentDto;
 import com.example.barberbooking.service.AppointmentService;
 import com.example.barberbooking.service.SessionService;
 import jakarta.servlet.http.HttpSession;
@@ -70,5 +71,17 @@ public class AppointmentController {
                 userId,
                 appointmentId
         );
+    }
+
+    @GetMapping("/provider")
+    public List<ProviderAppointmentDto> getProviderAppointments(
+            HttpSession session
+    ) {
+        int userId = sessionService.requireRole(
+                session,
+                "PROVIDER"
+        );
+
+        return appointmentService.getAppointmentsForProvider(userId);
     }
 }

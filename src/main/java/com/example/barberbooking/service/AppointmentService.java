@@ -2,6 +2,7 @@ package com.example.barberbooking.service;
 
 import com.example.barberbooking.dto.AppointmentDto;
 import com.example.barberbooking.repository.AppointmentRepository;
+import com.example.barberbooking.dto.ProviderAppointmentDto;
 
 import java.util.List;
 
@@ -79,4 +80,8 @@ public class AppointmentService {
                 slotId
         );
     }
+
+    public List<ProviderAppointmentDto> getAppointmentsForProvider(int userId) {
+        return appointmentRepository.findByProviderUserId(userId);
+        }
 }

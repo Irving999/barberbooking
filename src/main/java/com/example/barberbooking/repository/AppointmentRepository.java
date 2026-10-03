@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.barberbooking.dto.AppointmentDto;
 
+import com.example.barberbooking.dto.ProviderAppointmentDto;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -143,4 +145,49 @@ public class AppointmentRepository {
 
         jdbcTemplate.update(sql, slotId);
     }
+
+    public List<ProviderAppointmentDto> findByProviderUserId(int userId) {
+
+        String sql = """
+                SELECT
+                        a.appointment_id,
+                        a.slot_id,
+                        u.full_name AS customer_name,
+                        u.email AS customer_email,
+                        s.service_name,
+                        av.slot_date,
+                        av.start_time,
+                        av.end_time,
+                        a.booked_at,
+                        a.appointment_status
+                FROM appointments a
+                JOIN users u
+                        ON a.user_id = u.user_id
+                JOIN availability_slots av
+                        ON a.slot_id = av.slot_id
+                JOIN providers p
+                        ON av.provider_id = p.provider_id
+                JOIN services s
+                        ON av.service_id = s.service_id
+                WHERE p.user_id = ?
+                ORDER BY av.slot_date, av.start_time
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ProviderAppointmentDto(
+                        rs.getInt("appointment_id"),
+                        rs.getInt("slot_id"),
+                        rs.getString("customer_name"),
+                        rs.getString("customer_email"),
+                        rs.getString("service_name"),
+                        rs.getDate("slot_date").toLocalDate(),
+                        rs.getTime("start_time").toLocalTime(),
+                        rs.getTime("end_time").toLocalTime(),
+                        rs.getTimestamp("booked_at").toLocalDateTime(),
+                        rs.getString("appointment_status")
+                ),
+                userId
+        );
+        }
 }
