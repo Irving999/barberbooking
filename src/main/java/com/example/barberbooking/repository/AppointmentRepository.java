@@ -103,4 +103,44 @@ public class AppointmentRepository {
                 userId
         );
     }
+
+    public Optional<Integer> findOwnedBookedAppointmentSlot(
+            int appointmentId,
+            int userId
+    ) {
+        String sql = """
+                SELECT slot_id
+                FROM appointments
+                WHERE appointment_id = ?
+                AND user_id = ?
+                AND appointment_status = 'BOOKED'
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getInt("slot_id"),
+                appointmentId,
+                userId
+        ).stream().findFirst();
+    }
+
+    public void cancelAppointment(int appointmentId) {
+        String sql = """
+                UPDATE appointments
+                SET appointment_status = 'CANCELLED'
+                WHERE appointment_id = ?
+                """;
+
+        jdbcTemplate.update(sql, appointmentId);
+    }
+
+    public void markSlotAvailable(int slotId) {
+        String sql = """
+                UPDATE availability_slots
+                SET status = 'AVAILABLE'
+                WHERE slot_id = ?
+                """;
+
+        jdbcTemplate.update(sql, slotId);
+    }
 }

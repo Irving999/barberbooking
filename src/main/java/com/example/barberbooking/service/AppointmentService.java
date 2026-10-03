@@ -53,4 +53,30 @@ public class AppointmentService {
     public List<AppointmentDto> getAppointmentsForUser(int userId) {
         return appointmentRepository.findByUserId(userId);
     }
+
+    @Transactional
+    public void cancelAppointment(
+            int userId,
+            int appointmentId
+    ) {
+        Integer slotId = appointmentRepository
+                .findOwnedBookedAppointmentSlot(
+                        appointmentId,
+                        userId
+                )
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Appointment not found or cannot be cancelled"
+                        )
+                );
+
+        appointmentRepository.cancelAppointment(
+                appointmentId
+        );
+
+        appointmentRepository.markSlotAvailable(
+                slotId
+        );
+    }
 }

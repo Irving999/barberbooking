@@ -54,4 +54,21 @@ public class AppointmentController {
 
         return appointmentService.getAppointmentsForUser(userId);
     }
+
+    @DeleteMapping("/{appointmentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelAppointment(
+            @PathVariable int appointmentId,
+            HttpSession session
+    ) {
+        int userId = sessionService.requireRole(
+                session,
+                "CUSTOMER"
+        );
+
+        appointmentService.cancelAppointment(
+                userId,
+                appointmentId
+        );
+    }
 }
