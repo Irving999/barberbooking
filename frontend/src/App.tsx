@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SlotsPage from "./pages/SlotsPage";
 import BookingPage from "./pages/BookingPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 function Placeholder() {
   return <div style={{ padding: "40px" }}>Coming soon</div>;
@@ -16,9 +17,12 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/slots" element={<SlotsPage />} />
         <Route path="/booking" element={<BookingPage />} />
+        <Route
+          path="/confirmation"
+          element={<ConfirmationPage />}
+        />
 
         <Route path="/signup" element={<Placeholder />} />
-        <Route path="/confirmation" element={<Placeholder />} />
         <Route path="/appointments" element={<Placeholder />} />
         <Route path="/provider" element={<Placeholder />} />
       </Routes>
