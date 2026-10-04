@@ -188,3 +188,37 @@ a {
 .slot-book-button:hover {
   background: #e5e7eb;
 }
+
+.appointment-summary {
+  border: 2px solid #1f2937;
+  margin-bottom: 30px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #9ca3af;
+  font-size: 13px;
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.secondary-button {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px;
+  border: none;
+  background: transparent;
+  color: #1f2937;
+  text-align: center;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  text-decoration: underline;
+}
