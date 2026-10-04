@@ -1,9 +1,13 @@
 package com.example.barberbooking.controller;
 
 import com.example.barberbooking.dto.CreateSlotRequest;
+import com.example.barberbooking.dto.SlotDto;
 import com.example.barberbooking.service.SessionService;
 import com.example.barberbooking.service.SlotService;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,4 +61,15 @@ public class ProviderSlotController {
 
         slotService.deleteSlot(userId, slotId);
         }
+        
+    @GetMapping
+    public List<SlotDto> getMySlots(HttpSession session) {
+
+        int userId = sessionService.requireRole(
+                session,
+                "PROVIDER"
+        );
+
+        return slotService.getProviderSlots(userId);
+    }
 }

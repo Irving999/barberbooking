@@ -151,4 +151,24 @@ public class SlotService {
 
         slotRepository.deleteSlot(slotId, providerId);
         }
+
+    public List<SlotDto> getProviderSlots(int userId) {
+
+        int providerId = slotRepository
+                .findProviderIdByUserId(userId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Provider not found"
+                        )
+                );
+
+        return slotRepository.findAvailableSlots(
+                providerId,
+                null,
+                null,
+                100,
+                0
+        );
+    }
 }
