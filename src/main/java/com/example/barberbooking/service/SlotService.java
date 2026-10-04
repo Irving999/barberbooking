@@ -20,8 +20,51 @@ public class SlotService {
         this.slotRepository = slotRepository;
     }
 
-    public List<SlotDto> getAvailableSlots() {
-        return slotRepository.findAvailableSlots();
+    public List<SlotDto> getAvailableSlots(
+            Integer providerId,
+            Integer serviceId,
+            LocalDate date,
+            int page,
+            int size
+    ) {
+
+        if (providerId != null && providerId <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid provider ID"
+            );
+        }
+
+        if (serviceId != null && serviceId <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid service ID"
+            );
+        }
+
+        if (page < 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Page cannot be negative"
+            );
+        }
+
+        if (size <= 0 || size > 100) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Size must be between 1 and 100"
+            );
+        }
+
+        int offset = page * size;
+
+        return slotRepository.findAvailableSlots(
+                providerId,
+                serviceId,
+                date,
+                size,
+                offset
+        );
     }
 
     public void createSlot(

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Repository
 public class SlotRepository {
@@ -18,9 +19,15 @@ public class SlotRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<SlotDto> findAvailableSlots() {
+    public List<SlotDto> findAvailableSlots(
+            Integer providerId,
+            Integer serviceId,
+            LocalDate date,
+            int limit,
+            int offset
+    ) {
 
-        String sql = """
+        StringBuilder sql = new StringBuilder("""
                 SELECT
                     s.slot_id,
                     u.full_name AS barber_name,
@@ -36,18 +43,45 @@ public class SlotRepository {
                 JOIN services sv
                     ON s.service_id = sv.service_id
                 WHERE s.status = 'AVAILABLE'
-                ORDER BY s.slot_date, s.start_time
-                """;
+                """);
 
-        return jdbcTemplate.query(sql, (resultSet, rowNum) ->
-                new SlotDto(
-                        resultSet.getInt("slot_id"),
-                        resultSet.getString("barber_name"),
-                        resultSet.getString("service_name"),
-                        resultSet.getDate("slot_date").toLocalDate(),
-                        resultSet.getTime("start_time").toLocalTime(),
-                        resultSet.getTime("end_time").toLocalTime()
-                )
+        List<Object> parameters = new ArrayList<>();
+
+        if (providerId != null) {
+            sql.append(" AND s.provider_id = ? ");
+            parameters.add(providerId);
+        }
+
+        if (serviceId != null) {
+            sql.append(" AND s.service_id = ? ");
+            parameters.add(serviceId);
+        }
+
+        if (date != null) {
+            sql.append(" AND s.slot_date = ? ");
+            parameters.add(date);
+        }
+
+        sql.append("""
+                ORDER BY s.slot_date, s.start_time
+                LIMIT ? OFFSET ?
+                """);
+
+        parameters.add(limit);
+        parameters.add(offset);
+
+        return jdbcTemplate.query(
+                sql.toString(),
+                (resultSet, rowNum) ->
+                        new SlotDto(
+                                resultSet.getInt("slot_id"),
+                                resultSet.getString("barber_name"),
+                                resultSet.getString("service_name"),
+                                resultSet.getDate("slot_date").toLocalDate(),
+                                resultSet.getTime("start_time").toLocalTime(),
+                                resultSet.getTime("end_time").toLocalTime()
+                        ),
+                parameters.toArray()
         );
     }
 
