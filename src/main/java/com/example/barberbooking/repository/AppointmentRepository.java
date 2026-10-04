@@ -80,7 +80,11 @@ public class AppointmentRepository {
                     av.start_time,
                     av.end_time,
                     a.booked_at,
-                    a.appointment_status
+                    CASE
+                        WHEN a.appointment_status = 'CANCELLED' THEN 'CANCELLED'
+                        WHEN (av.slot_date + av.end_time) < CURRENT_TIMESTAMP THEN 'COMPLETED'
+                        ELSE 'BOOKED'
+                    END AS appointment_status
                 FROM appointments a
                 JOIN availability_slots av
                     ON a.slot_id = av.slot_id
@@ -159,7 +163,11 @@ public class AppointmentRepository {
                         av.start_time,
                         av.end_time,
                         a.booked_at,
-                        a.appointment_status
+                        CASE
+                            WHEN a.appointment_status = 'CANCELLED' THEN 'CANCELLED'
+                            WHEN (av.slot_date + av.end_time) < CURRENT_TIMESTAMP THEN 'COMPLETED'
+                            ELSE 'BOOKED'
+                        END AS appointment_status
                 FROM appointments a
                 JOIN users u
                         ON a.user_id = u.user_id
