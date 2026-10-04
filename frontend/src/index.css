@@ -256,3 +256,71 @@ a {
 .secondary-link:hover {
   text-decoration: underline;
 }
+
+.appointments-list {
+  margin-top: 20px;
+}
+
+.appointment-card {
+  border: 2px solid #1f2937;
+  margin-bottom: 22px;
+  background: #ffffff;
+}
+
+.appointment-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 20px;
+  border-bottom: 1px solid #9ca3af;
+}
+
+.appointment-card-header strong {
+  font-size: 15px;
+}
+
+.appointment-date {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.status-badge {
+  border: 1px solid #1f2937;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.appointment-card-body {
+  padding: 18px 20px;
+}
+
+.appointment-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.appointment-detail:last-child {
+  margin-bottom: 0;
+}
+
+.cancel-button {
+  width: 100%;
+  padding: 15px;
+
+  border: none;
+  border-top: 2px solid #1f2937;
+
+  background: #f3f4f6;
+  color: #1f2937;
+
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background: #e5e7eb;
+}
