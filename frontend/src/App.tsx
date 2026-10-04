@@ -5,6 +5,7 @@ import SlotsPage from "./pages/SlotsPage";
 import BookingPage from "./pages/BookingPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import AppointmentsPage from "./pages/AppointmentsPage";
+import ProviderPage from "./pages/ProviderPage";
 
 function Placeholder() {
   return <div style={{ padding: "40px" }}>Coming soon</div>;
@@ -28,7 +29,10 @@ export default function App() {
           path="/appointments"
           element={<AppointmentsPage />}
         />
-        <Route path="/provider" element={<Placeholder />} />
+        <Route
+          path="/provider"
+          element={<ProviderPage />}
+        />
       </Routes>
     </BrowserRouter>
   );

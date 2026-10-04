@@ -324,3 +324,43 @@ a {
 .cancel-button:hover {
   background: #e5e7eb;
 }
+
+.provider-section {
+  margin-bottom: 55px;
+}
+
+.provider-section h2 {
+  font-size: 17px;
+  margin-bottom: 22px;
+}
+
+.provider-row {
+  border: 2px solid #1f2937;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.remove-slot-button {
+  min-width: 100px;
+  padding: 12px 18px;
+
+  border: 2px solid #1f2937;
+  background: #f3f4f6;
+  color: #1f2937;
+
+  cursor: pointer;
+}
+
+.remove-slot-button:hover {
+  background: #e5e7eb;
+}
+
+.empty-message {
+  text-align: center;
+  font-size: 13px;
+  margin: 25px 0;
+}
