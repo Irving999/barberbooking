@@ -1,12 +1,14 @@
 package com.example.barberbooking.service;
 
 import com.example.barberbooking.repository.AppointmentRepository;
+import com.example.barberbooking.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -20,12 +22,22 @@ class AppointmentServiceTest {
     @Mock
     private AppointmentRepository appointmentRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private AppointmentService appointmentService;
 
     @BeforeEach
     void setUp() {
         appointmentService =
-                new AppointmentService(appointmentRepository);
+                new AppointmentService(
+                        appointmentRepository,
+                        userRepository,
+                        eventPublisher
+                );
     }
 
     @Test
@@ -33,6 +45,8 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.lockAvailableSlot(1))
                 .thenReturn(Optional.of(1));
+        when(userRepository.findEmailById(3))
+                .thenReturn(Optional.of("john@example.com"));
 
         appointmentService.bookAppointment(3, 1);
 
@@ -41,6 +55,14 @@ class AppointmentServiceTest {
 
         verify(appointmentRepository)
                 .markSlotBooked(1);
+
+        verify(eventPublisher).publishEvent(
+                new com.example.barberbooking.dto.AppointmentNotificationEvent(
+                        "john@example.com",
+                        "BOOKING_CONFIRMATION",
+                        "Your appointment has been booked."
+                )
+        );
     }
 
     @Test
@@ -48,6 +70,8 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.lockAvailableSlot(1))
                 .thenReturn(Optional.empty());
+        when(userRepository.findEmailById(3))
+                .thenReturn(Optional.of("john@example.com"));
 
         ResponseStatusException exception =
                 assertThrows(
@@ -91,6 +115,8 @@ class AppointmentServiceTest {
                 appointmentRepository
                         .findOwnedBookedAppointmentSlot(10, 3)
         ).thenReturn(Optional.of(1));
+        when(userRepository.findEmailById(3))
+                .thenReturn(Optional.of("john@example.com"));
 
         appointmentService.cancelAppointment(3, 10);
 
@@ -99,6 +125,14 @@ class AppointmentServiceTest {
 
         verify(appointmentRepository)
                 .markSlotAvailable(1);
+
+        verify(eventPublisher).publishEvent(
+                new com.example.barberbooking.dto.AppointmentNotificationEvent(
+                        "john@example.com",
+                        "CANCELLATION_CONFIRMATION",
+                        "Your appointment has been cancelled."
+                )
+        );
     }
 
     @Test
@@ -108,6 +142,8 @@ class AppointmentServiceTest {
                 appointmentRepository
                         .findOwnedBookedAppointmentSlot(10, 4)
         ).thenReturn(Optional.empty());
+        when(userRepository.findEmailById(4))
+                .thenReturn(Optional.of("jane@example.com"));
 
         ResponseStatusException exception =
                 assertThrows(

@@ -38,4 +38,19 @@ public class UserRepository {
                 email
         ).stream().findFirst();
     }
+
+    public Optional<String> findEmailById(int userId) {
+
+        String sql = """
+                SELECT email
+                FROM users
+                WHERE user_id = ?
+                """;
+
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> rs.getString("email"),
+                userId
+        ).stream().findFirst();
+    }
 }
