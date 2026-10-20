@@ -70,8 +70,6 @@ class AppointmentServiceTest {
 
         when(appointmentRepository.lockAvailableSlot(1))
                 .thenReturn(Optional.empty());
-        when(userRepository.findEmailById(3))
-                .thenReturn(Optional.of("john@example.com"));
 
         ResponseStatusException exception =
                 assertThrows(
@@ -142,8 +140,6 @@ class AppointmentServiceTest {
                 appointmentRepository
                         .findOwnedBookedAppointmentSlot(10, 4)
         ).thenReturn(Optional.empty());
-        when(userRepository.findEmailById(4))
-                .thenReturn(Optional.of("jane@example.com"));
 
         ResponseStatusException exception =
                 assertThrows(
