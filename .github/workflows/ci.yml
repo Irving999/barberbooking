@@ -1,0 +1,43 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: barberbooking
+          POSTGRES_USER: barberbooking
+          POSTGRES_PASSWORD: barberbooking
+        options: >-
+          --health-cmd "pg_isready -U barberbooking -d barberbooking"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/barberbooking
+      DB_USER: barberbooking
+      DB_PASSWORD: barberbooking
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build and test backend
+        run: ./mvnw test
